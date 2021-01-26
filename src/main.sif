@@ -1,25 +1,32 @@
 #include"core:basic.sif"
 #include"coder.sif"
 
-proc test_base64(to_base64 : string) {
-  sec := coder.to_base64(default_allocator(), transmute([]u8, to_base64));
-  printa(to_base64, transmute(string, sec));
+proc slice_equal(a: []$T, b: []T): bool {
+  if(a.count != b.count) return false;
+  for(i := 0; i < a.count; i += 1) {
+    if(a[i] != b[i]) return false;
+  }
+  return true;
 }
 
-
-proc test_from_base64(base64 : string) {
-  to_decode := transmute([]u8, base64);
-  assert(coder.is_base64(to_decode));
-  sec := coder.from_base64(default_allocator(), to_decode);
-  printa(base64, transmute(string, sec));
+proc test_base64(to_test : string) {
+  to_encode := transmute([]u8, to_test);
+  encoded := coder.to_base64(default_allocator(), to_encode);
+  assert(coder.is_base64(encoded));
+  decoded := coder.from_base64(default_allocator(), encoded);
+  assert(slice_equal(decoded, to_encode));
 }
 
 proc main() {
   //coder.to_base64(default_allocator(), .{});
   arr: [4]u8 = .{1,2,3,4};
   init();
-  test_from_base64("TWFuaa==");
-  test_from_base64("TWE=");
-  test_from_base64("TQ==");
-  test_from_base64("YXN1cmUu");
+  test_base64("Man");
+  test_base64("Ma");
+  test_base64("Ma");
+  test_base64("pleasure.");
+  test_base64("pleasure");
+  test_base64("pleasur");
+  test_base64("pleasu");
+  test_base64("pleas");
 }
