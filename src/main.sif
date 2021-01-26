@@ -1,6 +1,25 @@
 #include"core:basic.sif"
 #include"coder.sif"
 
+proc test_base64(to_base64 : string) {
+  sec := coder.to_base64(default_allocator(), transmute([]u8, to_base64));
+  printa(to_base64, transmute(string, sec));
+}
+
+
+proc test_from_base64(base64 : string) {
+  to_decode := transmute([]u8, base64);
+  assert(coder.is_base64(to_decode));
+  sec := coder.from_base64(default_allocator(), to_decode);
+  printa(base64, transmute(string, sec));
+}
+
 proc main() {
-  
+  //coder.to_base64(default_allocator(), .{});
+  arr: [4]u8 = .{1,2,3,4};
+  init();
+  test_from_base64("TWFuaa==");
+  test_from_base64("TWE=");
+  test_from_base64("TQ==");
+  test_from_base64("YXN1cmUu");
 }
