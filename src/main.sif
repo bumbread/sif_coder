@@ -10,10 +10,10 @@ proc slice_equal(a: []$T, b: []T): bool {
 }
 
 proc test_base64(to_test : string) {
-  to_encode := transmute([]u8, to_test);
-  encoded := coder.to_base64(default_allocator(), to_encode);
+  to_encode: = transmute([]u8, to_test);
+  encoded: = coder.to_base64(default_allocator(), to_encode);
   assert(coder.is_base64(encoded));
-  decoded := coder.from_base64(default_allocator(), encoded);
+  decoded: = coder.from_base64(default_allocator(), encoded);
   assert(slice_equal(decoded, to_encode));
 }
 

@@ -54,14 +54,14 @@ struct coder {
     output_size = round_up_size * 4 / 3;
     output : []u8 = new_slice(u8, output_size, allocator);
     
-    source_index := 0;
-    target_index := 0;
-    remainder := 0;
+    source_index: = 0;
+    target_index: = 0;
+    remainder: = 0;
     
     for(;source_index+3 <= input_size; source_index += 3) {
-      x := cast(int, bytes[source_index+0]);
-      y := cast(int, bytes[source_index+1]);
-      z := cast(int, bytes[source_index+2]);
+      x: = cast(int, bytes[source_index+0]);
+      y: = cast(int, bytes[source_index+1]);
+      z: = cast(int, bytes[source_index+2]);
       output[target_index+0] = _coder_base64_alphabet[x >> 2];
       output[target_index+1] = _coder_base64_alphabet[(0x30 & (x << 4)) | (y >> 4)];
       output[target_index+2] = _coder_base64_alphabet[(0x3C & (y << 2)) | (z >> 6)];
@@ -71,15 +71,15 @@ struct coder {
     
     padding: int = 3 - (input_size - source_index);
     if(padding == 2) {
-      x := cast(int, bytes[source_index+0]);
+      x: = cast(int, bytes[source_index+0]);
       output[target_index+0] = _coder_base64_alphabet[x >> 2];
       output[target_index+1] = _coder_base64_alphabet[(0x30 & (x << 4))];
       output[target_index+2] = _coder_base64_padding;
       output[target_index+3] = _coder_base64_padding;
     }
     else if(padding == 1) {
-      x := cast(int, bytes[source_index+0]);
-      y := cast(int, bytes[source_index+1]);
+      x: = cast(int, bytes[source_index+0]);
+      y: = cast(int, bytes[source_index+1]);
       output[target_index+0] = _coder_base64_alphabet[x >> 2];
       output[target_index+1] = _coder_base64_alphabet[(0x30 & (x << 4)) | (y >> 4)];
       output[target_index+2] = _coder_base64_alphabet[(0x3C & (y << 2))];
@@ -93,9 +93,9 @@ struct coder {
     if(byte_string.count == 0) return true;
     if(byte_string.count % 4 != 0) return false;
     equal_count: int = 0;
-    for(i := 0; i < byte_string.count; i += 1) {
-      c := byte_string[i];
-      valid := false;
+    for(i: = 0; i < byte_string.count; i += 1) {
+      c: = byte_string[i];
+      valid: = false;
       if(_coder_base64_indices[cast(int,c)] == -1) {
         if(c == '=') {
           equal_count += 1;
@@ -105,7 +105,7 @@ struct coder {
         else return false;
       }
     }
-    for(i := byte_string.count - 1; i >= byte_string.count - equal_count; i -= 1) {
+    for(i: = byte_string.count - 1; i >= byte_string.count - equal_count; i -= 1) {
       if(byte_string[i] != '=') {
         return false;
       }
@@ -120,8 +120,8 @@ struct coder {
     
     output: []u8 = new_slice(u8, output_size, allocator);
     
-    source_index := 0;
-    output_index := 0;
+    source_index: = 0;
+    output_index: = 0;
     for(; source_index+4 < base_64.count; source_index += 4) {
       a: u8 = cast(u8, _coder_base64_indices[cast(int, base_64[source_index+0])]);
       b: u8 = cast(u8, _coder_base64_indices[cast(int, base_64[source_index+1])]);
@@ -133,15 +133,17 @@ struct coder {
       output_index += 3;
     }
     
-    a := _coder_base64_indices[cast(int, base_64[source_index+0])];
-    b := _coder_base64_indices[cast(int, base_64[source_index+1])];
-    c := _coder_base64_indices[cast(int, base_64[source_index+2])];
-    d := _coder_base64_indices[cast(int, base_64[source_index+3])];
+    a: = _coder_base64_indices[cast(int, base_64[source_index+0])];
+    b: = _coder_base64_indices[cast(int, base_64[source_index+1])];
+    c: = _coder_base64_indices[cast(int, base_64[source_index+2])];
+    d: = _coder_base64_indices[cast(int, base_64[source_index+3])];
     output[output_index+0] = cast(u8, (a << 2) | (b >> 4));
     if(c != -1) output[output_index+1] = cast(u8, (0xF0 & (b << 4)) | (c >> 2));
     if(d != -1) output[output_index+2] = cast(u8, (0xC0 & (c << 6)) | d);
     
     return output;
   }
+  
+  
   
 };
