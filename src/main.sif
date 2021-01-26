@@ -11,22 +11,38 @@ proc slice_equal(a: []$T, b: []T): bool {
 
 proc test_base64(to_test : string) {
   to_encode: = transmute([]u8, to_test);
-  encoded: = coder.to_base64(default_allocator(), to_encode);
-  assert(coder.is_base64(encoded));
-  decoded: = coder.from_base64(default_allocator(), encoded);
+  encoded: = coder_to_base64(default_allocator(), to_encode);
+  assert(coder_is_base64(encoded));
+  decoded: = coder_from_base64(default_allocator(), encoded);
   assert(slice_equal(decoded, to_encode));
 }
 
+digits: [16]u8;
+
+proc print_byte(to_print: u8) {
+  print_char(digits[cast(i64, (to_print>>4)&0xF)]);
+  print_char(digits[cast(i64, to_print&0xF)]);
+}
+
+proc print_hash(hash: [16]u8) {
+  for(i: = 0; i < 16; i += 1) {
+    print_byte(hash[i]);
+  }
+  print("\n");
+}
+
 proc main() {
+  digits = .{
+    '0', '1', '2', '3',
+    '4', '5', '6', '7',
+    '8', '9', 'A', 'B',
+    'C', 'D', 'E', 'F',
+  };
+  
   //coder.to_base64(default_allocator(), .{});
-  arr: [4]u8 = .{1,2,3,4};
   coder_init_globals();
-  test_base64("Man");
-  test_base64("Ma");
-  test_base64("Ma");
-  test_base64("pleasure.");
-  test_base64("pleasure");
-  test_base64("pleasur");
-  test_base64("pleasu");
-  test_base64("pleas");
+  str: = "big bad dog eat josh";
+  hash: = coder_to_md5(default_allocator(), transmute([]u8, str));
+  //printa(hash);
+  print_hash(hash);
 }
