@@ -1,10 +1,14 @@
 
-
-  _coder_base64_padding: u8 = '=';
+_coder_base64_padding: u8 = '=';
 _coder_base64_alphabet: [64]u8;
 _coder_base64_indices: [256]i16;
 
-proc init() {
+// josh  hasn't yet fixed the 'bug' with 
+//   array/struct literals in the global 
+//   field  this  code  is temporary and 
+//   will  be  fixed,  when josh updates
+//   his language.
+proc coder_init_globals() {
   _coder_base64_alphabet = .{
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
     'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
@@ -33,7 +37,6 @@ proc init() {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   };
-  _coder_base64_padding = '=';
 }
 
 struct coder {

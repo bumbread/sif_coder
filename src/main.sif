@@ -20,7 +20,7 @@ proc test_base64(to_test : string) {
 proc main() {
   //coder.to_base64(default_allocator(), .{});
   arr: [4]u8 = .{1,2,3,4};
-  init();
+  coder_init_globals();
   test_base64("Man");
   test_base64("Ma");
   test_base64("Ma");
